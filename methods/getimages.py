@@ -6,6 +6,7 @@ IMG_BASE_URL = "https://www.vmgirls.com/page/{}/"
 def get_image_urls(base_url):
     session = HTMLSession()
     res = session.get(base_url)
+    print(res.text)
     if res.status_code != 200:
         yield False, res.text
     else:
