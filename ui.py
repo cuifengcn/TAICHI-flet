@@ -44,4 +44,4 @@ def main(page: Page):
     page.add(t)
 
 
-flet.app(target=main, assets_dir="assets")
+flet.app(target=main, assets_dir="assets", view=flet.WEB_BROWSER)

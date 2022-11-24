@@ -5,7 +5,7 @@ from utils import snack_bar, DESKTOP
 from methods.video2ascii import VideoToAscii
 
 
-class ViewPage(ft.Row):
+class ViewPageHidden(ft.Row):
     def __init__(self, page):
         self.input_file = ft.TextField(
             disabled=True, width=300, height=40, content_padding=1

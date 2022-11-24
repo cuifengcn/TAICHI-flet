@@ -37,7 +37,11 @@ class LiuMingYe:
             s = md5(tar_str.encode()).hexdigest()
             params["token"] = s
             session = HTMLSession(cls.headers)
-            res = session.post(cls.search_url, data=params)
+            try:
+                res = session.post(cls.search_url, data=params)
+            except Exception as e:
+                yield False, e
+                return
             if res.status_code != 200 or res.json()["code"] != 200:
                 yield False, res.text
             else:

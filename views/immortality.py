@@ -19,12 +19,12 @@ from flet import (
     ListView,
     Dropdown,
     dropdown,
-    Image,
     Text,
     Card,
     alignment,
 )
 from methods.getbooks import DataNovelInfo, DataChapter, ZXCS
+from utils import CORSImage
 
 
 class Novel(Row):
@@ -32,7 +32,7 @@ class Novel(Row):
         self.novel_info = novel_info
         self.read_callback = read_callback
         self.download_callback = download_callback
-        self.image = Image(
+        self.image = CORSImage(
             src=novel_info.img_url, width=30, height=30, border_radius=5, fit="cover"
         )
         self.name = Text(

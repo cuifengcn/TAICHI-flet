@@ -5,7 +5,7 @@ from typing import Optional
 from pathlib import Path
 
 import os
-from flet import SnackBar, Text
+from flet import SnackBar, Text, Image as _Image
 from requests_html import HTMLSession as _HTMLSession, HTMLResponse
 
 """"""
@@ -13,6 +13,18 @@ CURR_PATH = Path(__file__).absolute().parent
 DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop")
 CACHE = CURR_PATH.joinpath("Cache")
 CACHE.mkdir(parents=True, exist_ok=True)
+
+
+class CORSImage(_Image):
+    cors_url = "https://pc-cors.elitb.com/proxy?url="
+
+    def __init__(self, *args, **kwargs):
+        if "src" in kwargs:
+            kwargs["src"] = self.cors_url + kwargs["src"]
+        else:
+            if args:
+                args = (self.cors_url + args[0],) + args[1:]
+        super(CORSImage, self).__init__(*args, **kwargs)
 
 
 def snack_bar(page, message):

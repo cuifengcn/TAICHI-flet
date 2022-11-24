@@ -6,7 +6,6 @@ from flet import (
     Container,
     Row,
     Text,
-    Image,
     ListView,
     colors,
     Stack,
@@ -27,7 +26,7 @@ from flet import (
 )
 
 from methods.getmusics import DataSong
-from utils import snack_bar, ms_to_time, handle_redirect, download_url_content, DESKTOP
+from utils import snack_bar, ms_to_time, handle_redirect, download_url_content, DESKTOP, CORSImage
 from methods.getmusics import LiuMingYe
 
 
@@ -39,7 +38,7 @@ class Song(Row):
     def __init__(self, song: DataSong, select_callback):
         self.song: DataSong = song
         self.select_callback = select_callback
-        self.photo = Image(
+        self.photo = CORSImage(
             src=song.photo_url,
             width=40,
             height=40,
@@ -195,7 +194,7 @@ class AudioInfo(Row):
         )
 
     def set_info(self, song: DataSong):
-        self.audio_photo.content = Image(song.big_photo_url, fit="cover")
+        self.audio_photo.content = CORSImage(song.big_photo_url, fit="cover")
         self.audio_name.value = song.music_name
         self.audio_singer.value = song.singer_name
         self.update()
@@ -220,7 +219,7 @@ class AudioBar(Row):
         )
         self.total_time = Text("00:00")
         self.popup_menu = PopupMenuButton(
-            items=[PopupMenuItem(text="下载歌曲", on_click=self.download_music)]
+            items=[PopupMenuItem(text="web版不支持下载歌曲")]
         )
         self.play_btn = IconButton(
             icon=icons.PLAY_CIRCLE,

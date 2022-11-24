@@ -9,7 +9,6 @@ from flet import (
     Row,
     alignment,
     Column,
-    Image,
     Page,
     margin,
     icons,
@@ -17,7 +16,7 @@ from flet import (
     dropdown,
 )
 
-from utils import snack_bar
+from utils import snack_bar, CORSImage
 from methods.getimages import CiYuanDao, ToMeinv
 
 
@@ -72,11 +71,10 @@ class ViewPage(Stack):
                 img_url = next(self.tomeinv_generator)
             else:
                 img_url = next(self.ciyuandao_generator)
+            self.content_area.content = CORSImage(src=img_url)
         except Exception as e:
             snack_bar(self.page, f"获取失败: {e}")
-            return
         self.page.splash.visible = False
-        self.content_area.content = Image(src=img_url)
         self.page.update()
 
     def btn_opacity(self, e):
