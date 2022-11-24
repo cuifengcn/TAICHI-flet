@@ -1,125 +1,147 @@
+import random
+from typing import List, Generator, Optional
 from utils import HTMLSession
 
-IMG_BASE_URL = "https://www.vmgirls.com/page/{}/"
+
+class _Base:
+    base_url = ""
+    page_url = ""
+    page_num = None
+    max_page = 0
+    page_list = Optional[list]  # 默认如果是个列表的话，子类会继承父类的列表，所以父类用None表示，子类重新初始化为列表
+
+    @classmethod
+    def set_page(cls, page_num: int):
+        cls.page = page_num
+
+    @classmethod
+    def image_url_generator(cls):
+        while True:
+            if cls.page_num is None:
+                # 初始化，随机选择一个开始页面
+                cls.page_num = random.randint(1, cls.max_page)
+            else:
+                if cls.page_num > cls.max_page:
+                    cls.page_num = 1
+            if not cls.page_list:
+                cls.page_list.extend(cls._get_page_list(cls.page_num))
+            detail_url = cls.page_list.pop(0)
+            for src in cls._get_image_url(detail_url):
+                yield src
+            cls.page_num += 1
+
+    @classmethod
+    def _get_image_url(cls, detail_url) -> Generator[str, None, None]:
+        raise NotImplementedError
+
+    @classmethod
+    def _get_page_list(cls, page_num: int) -> List[str]:
+        raise NotImplementedError
 
 
-def get_image_urls(base_url):
-    session = HTMLSession()
-    res = session.get(base_url)
-    print(res.text)
-    if res.status_code != 200:
-        yield False, res.text
-    else:
-        elems = res.html.xpath('//a[@class="media-content"]')
-        for elem in elems:
-            s = elem.attrs.get("href")
-            if s:
-                detail = session.get(s)
-                detail_imgs = detail.html.xpath(
-                    '//div[@class="nc-light-gallery"]//img[@src]'
-                )
-                for detail_img in detail_imgs:
-                    d = detail_img.attrs.get("src")
-                    if d:
-                        yield d
+# class VMGirls:
+#     page_url = "https://www.vmgirls.com/page/{}/"
+#
+#     @classmethod
+#     def get_image_urls(cls, base_url):
+#         session = HTMLSession()
+#         res = session.get(base_url)
+#         if res.status_code != 200:
+#             yield False, res.text
+#         else:
+#             elems = res.html.xpath('//a[@class="media-content"]')
+#             for elem in elems:
+#                 s = elem.attrs.get("href")
+#                 if s:
+#                     detail = session.get(s)
+#                     detail_imgs = detail.html.xpath(
+#                         '//div[@class="nc-light-gallery"]//img[@src]'
+#                     )
+#                     for detail_img in detail_imgs:
+#                         d = detail_img.attrs.get("src")
+#                         if d:
+#                             yield d
 
 
-"""次元岛
-import requests
-import re
-import parsel
-from tqdm import tqdm
-#注意headers里面的大小写
-n = 0
-headers={#不能爬了，就在这里添加cookie
-'Referer':'http://ciyuandao.com/photo/list/0-0-1',
-'User-Agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Mobile Safari/537.36'
-}
-for i in tqdm(range(37, 247)):
-    n = n + 1
-    print ("第%s图片开始获取......"% (n)) 
-    try:
-        url=f'http://ciyuandao.com/photo/list/0-1-{i}'
-        response=requests.get(url=url,headers=headers)
-        # print(response.text)
-        src=re.findall('\s< img src="(.*?)">',response.text)
-        selector=parsel.Selector(response.text)
-        a=selector.css('p a ::text').getall()
-        # print(len(a))
-        # author=selector.css('p>a[href*="coser"]::text').getall()
-        Title=[]
-        for i in range(0,40,2):
-            Title.append(a[i]+a[i+1])
-            #创建文件夹
-        import os
-        #os.makedirs('xxx')
-         
-        for i in range(0,20):
-            url1=src[i]
-            title=Title[i]
-            response_content=requests.get(url=url1,headers=headers).content
-            syspath="C:/Users/Administrator/Desktop/xxx/"
-            pic_name=(syspath + title + ".png")
-            with open( pic_name,mode='wb') as f:
-                f.write(response_content)
-    except FileNotFoundError as f:
-        pass
-    except OSError as o:
-        pass
-    continue   
+class CiYuanDao(_Base):
+    base_url = "http://ciyuandao.com"
+    page_url = "http://ciyuandao.com/photo/list/0-0-{page_num}"
+    max_page = 451
+    page_list = []
 
-"""
-"""2美女
-import os
-import re
-import time
-from urllib import request
-from bs4 import BeautifulSoup
- 
- 
-def get_last_page(text):
-    return int(re.findall('[^/$]\d*', re.split('/', text)[-1])[0])
- 
- 
-def html_parse(url, headers):
-    time.sleep(3)
-    resp = request.Request(url=url, headers=headers)
-    res = request.urlopen(resp)
-    html = res.read().decode("utf-8")
-    soup = BeautifulSoup(html, "html.parser", from_encoding="utf-8")
-    return soup
- 
- 
-headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59'
-}
- 
-url = "https://www.2meinv.com/"
-for p in range(1, 10 + 1):
-    next_url = url + "index-" + str(p) + ".html"
-    soup = html_parse(next_url, headers)
-    link_node = soup.findAll('div', attrs={"class": "dl-name"})
-    for a in link_node:
-        path = "G:/spider/image/2meinv/"
-        href = a.find('a', attrs={'target': '_blank'}).get('href')
-        no = re.findall('[^-$][\d]', href)[1] + re.findall('[^-$][\d]', href)[2]
-        first_url = url + "/article-" + no + ".html"
-        title = a.find('a', attrs={'target': '_blank'}).text
-        path = path + title + "/"
-        soup = html_parse(href, headers)
-        count = soup.find('div', attrs={'class': 'des'}).find('h1').text
-        last_page = get_last_page(count)
-        for i in range(1, last_page + 1):
-            next_url = url + "/article-" + no + "-" + str(i) + ".html"
-            soup = html_parse(next_url, headers)
-            image_url = soup.find('img')['src']
-            image_name = image_url.split("/")[-1]
-            fileName = path + image_name
-            if not os.path.exists(path):
-                os.makedirs(path)
-            if os.path.exists(fileName):
-                continue
-            request.urlretrieve(image_url, filename=fileName)
-            request.urlcleanup()
-        print(title, "下载完成了")
-"""
+    @classmethod
+    def _get_image_url(cls, detail_url):
+        # 获取里面的图片
+        session = HTMLSession()
+        resp = session.get(detail_url)
+        a_list = resp.html.xpath('//div[@class="talk_pic hauto"]//img[@src]')
+        for img in a_list:
+            img_src = img.attrs.get("src")
+            if img_src:
+                yield img_src
+
+    @classmethod
+    def _get_page_list(cls, page_num: int):
+        # 获取此page下面的所有相关url
+        url = cls.page_url.format(page_num=page_num)
+        session = HTMLSession()
+        resp = session.get(url)
+        hrefs = resp.html.xpath('//div[@class="pics"]//a[@class="tits grey" and @href]')
+        res = []
+        for a in hrefs:
+            a = a.attrs.get("href", "")
+            if a:
+                res.append(cls.base_url + a)
+        return res
+
+
+class ToMeinv(_Base):
+    base_url = "https://www.2meinv.com/"
+    page_url = "https://www.2meinv.com/index-{page_num}.html"
+    max_page = 212
+    page_list = []
+
+    @classmethod
+    def _get_image_url(cls, detail_url):
+        # 获取里面的图片
+        detail_url_prefix = detail_url[:-5] + "-"
+        session = HTMLSession()
+        resp = session.get(detail_url)
+        total_page_list = resp.html.xpath(
+            '//div[@class="page-show"]//a[@href and not(@class)]/text()'
+        )
+        if len(total_page_list) > 2:
+            total_sub_page = total_page_list[-2]
+        else:
+            total_sub_page = 1
+        curr_sub_page = 1
+        while curr_sub_page <= int(total_sub_page):
+            sub_page_url = detail_url_prefix + str(curr_sub_page) + ".html"
+            sub_page_content = session.get(sub_page_url)
+            src = sub_page_content.html.xpath(
+                '//div[@class="pp hh"]//img[@src and @alt]'
+            )[0].attrs.get("src")
+            if src:
+                yield src
+            curr_sub_page += 1
+
+    @classmethod
+    def _get_page_list(cls, page_num: int):
+        # 获取此page下面的所有相关url
+        url = cls.page_url.format(page_num=page_num)
+        session = HTMLSession()
+        resp = session.get(url)
+        hrefs = resp.html.xpath(
+            '//ul[@class="detail-list"]//a[@class="dl-pic" and  @href]'
+        )
+        res = []
+        for a in hrefs:
+            a = a.attrs.get("href", "")
+            if a:
+                res.append(a)
+        return res
+
+
+# g = ToMeinv.image_url_generator()
+# for i in range(200):
+#     print(next(g))

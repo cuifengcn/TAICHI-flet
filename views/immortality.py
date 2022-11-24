@@ -106,10 +106,8 @@ class Novel(Row):
 class SearchComponent(Stack):
     def __init__(self, search_event_callback):
         self.callback = search_event_callback
-        self.input_text = Ref[TextField]()
         self.search_input = TextField(
             label="请输入作者或小说名",
-            ref=self.input_text,
             width=300,
             height=40,
             on_submit=self.search,
@@ -128,7 +126,7 @@ class SearchComponent(Stack):
         )
 
     def search(self, e=None):
-        self.callback(self.input_text.current.value)
+        self.callback(self.search_input.value)
 
 
 class SearchDisplay(ListView):
@@ -177,10 +175,14 @@ class RightDisplaySection(Column):
 
     def search_callback(self, search_target):
         # 执行搜索操作
+        self.page.splash.visible = True
+        self.page.update()
         flag = False
         for book in self.parent.book_api.search_books(search_target):
             if not flag:
+                self.page.splash.visible = False
                 self.show_area.clear_novels()
+                self.page.update()
                 flag = True
             self.show_area.add_novel(book)
 
