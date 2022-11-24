@@ -72,11 +72,10 @@ class ViewPage(Stack):
                 img_url = next(self.tomeinv_generator)
             else:
                 img_url = next(self.ciyuandao_generator)
+            self.content_area.content = Image(src=img_url)
         except Exception as e:
             snack_bar(self.page, f"获取失败: {e}")
-            return
         self.page.splash.visible = False
-        self.content_area.content = Image(src=img_url)
         self.page.update()
 
     def btn_opacity(self, e):
