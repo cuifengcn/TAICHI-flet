@@ -260,7 +260,7 @@ class AudioBar(Row):
                 self.page.overlay.remove(self.playing_audio)
             self.playing_audio = PlayAudio(
                 song=song,
-                src=song.music_url,
+                src=handle_redirect(song.music_url),
                 autoplay=False,
                 volume=100,
                 balance=0,
