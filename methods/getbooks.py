@@ -1,7 +1,8 @@
 import re
-from typing import List, Optional, Generator
-from utils import HTMLSession
 from dataclasses import dataclass, field
+from typing import List, Generator
+
+from utils import HTMLSession
 
 
 @dataclass

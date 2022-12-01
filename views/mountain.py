@@ -1,7 +1,3 @@
-from enum import Enum
-from functools import partial
-from random import randint
-
 from flet import (
     Container,
     Stack,
@@ -17,8 +13,8 @@ from flet import (
     dropdown,
 )
 
-from utils import snack_bar
 from methods.getimages import CiYuanDao, ToMeinv
+from utils import snack_bar
 
 
 class ViewPage(Stack):
@@ -28,7 +24,7 @@ class ViewPage(Stack):
             width=150,
             value="ciyuandao",
             options=[dropdown.Option("ciyuandao"), dropdown.Option("2meinv")],
-            on_change=self.fresh_image
+            on_change=self.fresh_image,
         )
         self.content_area = Container(
             margin=10, alignment=alignment.center, expand=True
@@ -55,7 +51,12 @@ class ViewPage(Stack):
             animate_opacity=300,
         )
         super(ViewPage, self).__init__(
-            controls=[self.content_area, self.next_btn, Container(self.resource_select, top=10, right=10)], expand=True
+            controls=[
+                self.content_area,
+                self.next_btn,
+                Container(self.resource_select, top=10, right=10),
+            ],
+            expand=True,
         )
         self.ciyuandao_generator = CiYuanDao.image_url_generator()
         self.tomeinv_generator = ToMeinv.image_url_generator()

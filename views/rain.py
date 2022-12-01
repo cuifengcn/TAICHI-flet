@@ -1,5 +1,3 @@
-import flet
-from typing import List
 from typing import Optional
 
 from flet import (
@@ -22,13 +20,11 @@ from flet import (
     Slider,
     PopupMenuButton,
     PopupMenuItem,
-    Icon,
-    Page
 )
 
 from methods.getmusics import DataSong
+from methods.getmusics import HIFINI
 from utils import snack_bar, ms_to_time, handle_redirect, download_url_content, DESKTOP
-from methods.getmusics import LiuMingYe
 
 
 class Song(Row):
@@ -90,11 +86,12 @@ class Song(Row):
         if value is True:
             self.container.bgcolor = colors.BLUE_GREY_700
             self.container.opacity = 1
+            self.update()
             self.select_callback(self)
         else:
             self.container.bgcolor = colors.BLUE_GREY_300
             self.container.opacity = 0.7
-        self.update()
+            self.update()
 
     def on_click(self, e):
         self.selected = True
@@ -120,7 +117,7 @@ class SearchCompoment(Row):
     """
 
     def __init__(self, search_callback):
-        self.music_api = LiuMingYe
+        self.music_api = HIFINI
         self.search_callback = search_callback
         self.search_input = TextField(
             label="请输入歌曲名称或歌手名称",
@@ -148,7 +145,6 @@ class MusicList(Row):
 
     def __init__(self, select_callback):
         self.select_callback = select_callback
-        self.music_list = []
         self.list = ListView(width=400, height=450, spacing=10, padding=10)
         super(MusicList, self).__init__(
             controls=[self.list], alignment="center", vertical_alignment="center"
@@ -258,6 +254,11 @@ class AudioBar(Row):
             self.song = song
             if self.playing_audio in self.page.overlay:
                 self.page.overlay.remove(self.playing_audio)
+            # 双重保险
+            for i in self.page.overlay[:]:
+                if isinstance(i, PlayAudio):
+                    self.page.overlay.remove(i)
+
             self.playing_audio = PlayAudio(
                 song=song,
                 src=handle_redirect(song.music_url),
@@ -305,7 +306,11 @@ class AudioBar(Row):
     def position_changed(self, e):
         during = float(e.data)
         self.curr_time.value = ms_to_time(during)
-        percent = during / self.playing_audio.during if self.playing_audio.during else self.playing_audio.get_duration()
+        percent = (
+            during / self.playing_audio.during
+            if self.playing_audio.during
+            else self.playing_audio.get_duration()
+        )
         if not self.is_sliding:
             self.control_bar.value = percent
         self.update()
@@ -354,7 +359,7 @@ class AudioBar(Row):
 class RightSearchSection(Column):
     """右侧区域"""
 
-    def __init__(self, parent: 'ViewPage'):
+    def __init__(self, parent: "ViewPage"):
         self.parent = parent
         self.music_list = MusicList(self.parent.select_callback)
         self.search_content = SearchCompoment(self.parent.search_callback)
@@ -388,7 +393,7 @@ class LeftPlaySection(Column):
 
 class ViewPage(Stack):
     def __init__(self, page):
-        self.music_api = LiuMingYe
+        self.music_api = HIFINI
         self.left_widget = LeftPlaySection(self)
         self.right_widget = RightSearchSection(self)
         self.row = Row(
@@ -401,7 +406,8 @@ class ViewPage(Stack):
         self.page = page
 
     def init_event(self):
-        self.right_widget.search_content.search(None)
+        if not self.right_widget.music_list.list.controls:
+            self.right_widget.search_content.search(None)
 
     def select_callback(self, song: Song):
         self.left_widget.play_music(song)
@@ -418,7 +424,6 @@ class ViewPage(Stack):
                     flag = True
                 else:
                     self.right_widget.music_list.set_musics(song)
-
 
 # def main(page: Page):
 #     page.vertical_alignment = "center"

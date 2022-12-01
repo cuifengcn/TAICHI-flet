@@ -1,33 +1,37 @@
 import flet as ft
 from flet import padding
-from methods.getorrent import DataBTDetail, BTSow, TorrentKitty
+
+from methods.getorrent import DataBTDetail, BTSow, TorrentKitty, DataBT
 from utils import snack_bar
 
 
-class Title(ft.Row):
-    def __init__(self):
-        self.text = ft.Text("聚合磁力搜索", width=300, size=30, text_align="center")
-        super(Title, self).__init__(
-            [self.text], alignment="center", vertical_alignment="center"
-        )
-
-
 class SearchComponent(ft.Row):
-    def __init__(self, parent: "ViewPage"):
-        self.parent = parent
+    def __init__(self, search_callback):
+        self.search_callback = search_callback
+        self.title = ft.Text("聚合磁力搜索", size=30, text_align="center", expand=5)
         self.search_input = ft.TextField(
-            label="请输入搜索内容",
-            width=300,
-            height=40,
-            on_submit=self.search,
+            label="请输入搜索内容", height=40, on_submit=self.search, expand=1
         )
         self.submit_btn = ft.FloatingActionButton(
             "搜索", on_click=self.search, height=40, width=80, autofocus=True
         )
         super(SearchComponent, self).__init__(
-            controls=[self.search_input, self.submit_btn],
+            controls=[
+                ft.Column(
+                    [
+                        ft.Row([self.title], alignment="center"),
+                        ft.Row(
+                            [self.search_input, self.submit_btn], alignment="center"
+                        ),
+                    ],
+                    alignment="start",
+                    horizontal_alignment="center",
+                    expand=True,
+                )
+            ],
             alignment="center",
             vertical_alignment="center",
+            expand=1,
         )
 
     def search(self, e):
@@ -35,7 +39,25 @@ class SearchComponent(ft.Row):
         if not target:
             return
         else:
-            self.parent.search(target, 1)
+            self.search_callback(target)
+
+
+class PageRow(ft.Row):
+    def __init__(self, prev_page_callback, next_page_callback):
+        self.prev_page_callback = prev_page_callback
+        self.next_page_callback = next_page_callback
+        self.prev_page_btn = ft.TextButton(
+            "上一页", disabled=True, on_click=prev_page_callback
+        )
+        self.curr_page = ft.Text(width=100)
+        self.next_page_btn = ft.TextButton(
+            "下一页", disabled=True, on_click=next_page_callback
+        )
+        super(PageRow, self).__init__(
+            [self.prev_page_btn, self.next_page_btn],
+            expand=True,
+            alignment="spaceAround",
+        )
 
 
 class BTContent(ft.Card):
@@ -53,7 +75,9 @@ class BTContent(ft.Card):
             style=ft.ButtonStyle(padding=padding.all(0)),
             on_click=self.collapse_select,
         )
-        self.detail_area = ft.ListView(controls=[], expand=True, visible=False, animate_size=500)
+        self.detail_area = ft.ListView(
+            controls=[], expand=True, visible=False, animate_size=500
+        )
         super(BTContent, self).__init__(
             content=ft.Container(
                 ft.Column(
@@ -111,116 +135,118 @@ class BTContent(ft.Card):
         self.page.update()
 
 
-class ShowArea(ft.Column):
-    def __init__(self, parent):
+class MyTab(ft.Tab):
+    def __init__(self, parent: "DisplayComponent", page_name):
+        self.page_name = page_name
+        self.keyword = ""
+        self.curr_page_num = 0
         self.parent = parent
-        self.tabs = ft.Tabs(tabs=[], width=400)
-        self.prev_page_btn = ft.TextButton(
-            "上一页", disabled=True, on_click=self.parent.to_prev_page
+        self.page_manage = PageRow(self.prev_page_callback, self.next_page_callback)
+        self.content_list = ft.ListView(
+            controls=[self.page_manage], expand=True, padding=5
         )
-        self.curr_page = ft.Text(width=100)
-        self.next_page_btn = ft.TextButton(
-            "下一页", disabled=True, on_click=self.parent.to_next_page
-        )
-        super(ShowArea, self).__init__(
-            [
-                ft.Row(
-                    [self.prev_page_btn, self.curr_page, self.next_page_btn],
-                    alignment="center",
-                    expand=1,
-                ),
-                ft.Row([self.tabs], alignment="center", expand=10),
-            ],
-            alignment="center",
-            expand=True,
-        )
+        super(MyTab, self).__init__(text=page_name, content=self.content_list)
 
-    def tab_content(self):
-        return ft.ListView(controls=[], expand=True, padding=5)
+    def prev_page_callback(self, e):
+        self.parent.prev_page_callback(self.keyword, self.curr_page_num - 1)
 
-    def clear_contents(self, tab_name=None):
-        # 清楚所有tabs
-        if tab_name is None:
-            self.tabs.tabs.clear()
+    def next_page_callback(self, e):
+        self.parent.prev_page_callback(self.keyword, self.curr_page_num + 1)
+
+    def add_content(self, content: DataBT):
+        if not content:
+            return
+        self.content_list.controls = self.content_list.controls[:1]  # 只保留上下页
+        self.curr_page_num = content.curr_page
+        self.keyword = content.keyword
+        if content.next_page:
+            self.page_manage.next_page_btn.disabled = False
         else:
-            for i in range(len(self.tabs.tabs)):
-                if self.tabs.tabs[i].text == tab_name:
-                    self.tabs.tabs[i].content = self.tab_content()
-                    break
+            self.page_manage.next_page_btn.disabled = True
+        if content.curr_page == 1:
+            self.page_manage.prev_page_btn.disabled = True
+        else:
+            self.page_manage.prev_page_btn.disabled = False
+        for c in content.result:
+            row = BTContent(c, self.parent.parent)
+            self.content_list.controls.append(row)
+            self.page.update()
+
+
+class DisplayComponent(ft.Row):
+    def __init__(self, parent: "ViewPage"):
+        self.parent = parent
+        self.Tabs = ft.Tabs(tabs=[], width=400)
+        super(DisplayComponent, self).__init__(
+            [self.Tabs], expand=5, alignment="center", vertical_alignment="start"
+        )
+
+    def set_content(self, content: DataBT):
+        tab_names = [i.page_name for i in self.Tabs.tabs]
+        if content.name in tab_names:
+            index = tab_names.index(content.name)
+            self.Tabs.tabs[index].add_content(content)
+        else:
+            tab = MyTab(self, content.name)
+            self.Tabs.tabs.append(tab)
+            self.update()
+            tab.add_content(content)
         self.update()
 
-    def add_tab(self, tab_name, icon=None):
-        # 添加一个tab
-        tab = ft.Tab(tab_name, icon=icon, content=self.tab_content())
-        self.tabs.tabs.append(tab)
-        self.update()
+    def next_page_callback(self, keyword, page_num):
+        for content in self.parent.to_page(keyword, page_num):
+            self.set_content(content)
 
-    def remove_tab(self, tab_name):
-        # 移除一个tab
-        for i in range(len(self.tabs.tabs)):
-            if self.tabs.tabs[i].text == tab_name:
-                self.tabs.tabs.pop(i)
-                self.update()
-                return
-
-    def add_content(self, tab_name, content: BTContent):
-        flag = False
-        for i in range(len(self.tabs.tabs)):
-            if self.tabs.tabs[i].text == tab_name:
-                self.tabs.tabs[i].content.controls.append(content)
-                flag = True
-        if not flag:
-            self.add_tab(tab_name)
-            self.add_content(tab_name, content)
-        self.update()
+    def prev_page_callback(self, keyword, page_num):
+        for content in self.parent.to_page(keyword, page_num):
+            self.set_content(content)
 
 
-class ViewPage(ft.Row):
+class ViewPage(ft.ResponsiveRow):
     def __init__(self, page):
-        self.title = Title()
-        self.search_component = SearchComponent(self)
-        self.show_area = ShowArea(self)
-
+        self.apis = [BTSow, TorrentKitty]
+        self.search_component = SearchComponent(self.search_callback)
+        self.display_component = DisplayComponent(self)
         super(ViewPage, self).__init__(
             [
                 ft.Column(
-                    [self.title, self.search_component, self.show_area],
-                    expand=True,
-                    spacing=20,
-                    alignment="center",
+                    [self.search_component, self.display_component],
+                    col={"xs": 12, "sm": 6},
+                    alignment="start",
+                    spacing=10,
+                    run_spacing=10,
                     horizontal_alignment="center",
+                    expand=True,
                 )
             ],
             alignment="center",
+            vertical_alignment="start",
         )
-        self.page = page
 
-    def search(self, target, page_count):
-        btsow_results = BTSow.search(target, page_count)
-        flag = False
-        for result in btsow_results.result:
-            if not flag:
-                self.show_area.clear_contents(BTSow.name)
-                flag = True
-            self.show_area.add_content(BTSow.name, BTContent(result, self))
-        if btsow_results.next_page:
-            self.show_area.next_page_btn.disabled = False
-        else:
-            self.show_area.next_page_btn.disabled = True
-        if int(page_count) == 1:
-            self.show_area.prev_page_btn.disabled = True
-        else:
-            self.show_area.prev_page_btn.disabled = False
-        self.update()
+    def search_callback(self, target):
+        self.page.splash.visible = True
+        self.page.update()
+        for api in self.apis:
+            result = api.search(target, 1)  # 1表示搜索第一页
+            self.display_component.set_content(result)
+        self.page.splash.visible = False
+        self.page.update()
 
-    def show_details(self, content: BTContent):
-        detail_url = content.bt.detail_url
-        if content.bt.source == BTSow.name:
-            details = BTSow.detail(detail_url)
-            content.set_details(details)
+    def to_page(self, keyword, name):
+        self.page.splash.visible = True
+        self.page.update()
+        for api in self.apis:
+            result = api.search(keyword, name)
+            yield result
+        self.page.splash.visible = False
+        self.page.update()
 
-    def to_prev_page(self, e):
-        pass
 
-    def to_next_page(self, e):
-        pass
+# def main(page: ft.Page):
+#     page.vertical_alignment = "center"
+#     page.horizontal_alignment = "center"
+#
+#     page.add(ViewPage(page))
+#
+#
+# ft.app(target=main)

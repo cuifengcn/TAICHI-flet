@@ -1,10 +1,10 @@
 # coding:utf-8
+import os
 import time
+from pathlib import Path
 from threading import Thread
 from typing import Optional
-from pathlib import Path
 
-import os
 from flet import SnackBar, Text
 from requests_html import HTMLSession as _HTMLSession, HTMLResponse
 

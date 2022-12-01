@@ -1,9 +1,9 @@
 # --coding:utf-8--
-import re
-from utils import HTMLSession
-from typing import List
 from dataclasses import dataclass, field
-from urllib.parse import unquote, quote
+from typing import List
+from urllib.parse import quote
+
+from utils import HTMLSession
 
 
 class Base:
@@ -38,6 +38,9 @@ class DataBTDetailSubDetail:
 @dataclass
 class DataBT:
     result: List[DataBTDetail] = field(default_factory=lambda: [])
+    name: str = ""
+    keyword: str = ""
+    curr_page: int = 0
     next_page: bool = False
 
 
@@ -47,7 +50,7 @@ class BTSow(Base):
 
     @classmethod
     def search(cls, keyword, page_count, fuzzy_match=False):
-        res = DataBT()
+        res = DataBT(name=cls.name, keyword=keyword, curr_page=page_count)
         session = HTMLSession()
         page = session.get(cls.base_url.format(keyword=keyword, page_count=page_count))
         page_list = page.html.xpath('//ul[@class="pagination pagination-lg"]')
@@ -85,7 +88,7 @@ class BTSow(Base):
                     size=size,
                     date=date,
                     detail_url=detail_url,
-                    source=cls.name
+                    source=cls.name,
                 )
             )
         return res
@@ -111,7 +114,7 @@ class TorrentKitty(Base):
 
     @classmethod
     def search(cls, keyword, page_count, fuzzy_match=False):
-        res = DataBT()
+        res = DataBT(name=cls.name, keyword=keyword, curr_page=page_count)
         session = HTMLSession()
 
         page = session.get(cls.base_url.format(keyword=keyword, page_count=page_count))
@@ -144,7 +147,7 @@ class TorrentKitty(Base):
                     size=size,
                     date=date,
                     detail_url=detail_url,
-                    source=cls.name
+                    source=cls.name,
                 )
             )
         return res

@@ -1,4 +1,5 @@
 import os
+
 import cv2
 from PIL import Image, ImageFont, ImageDraw
 
@@ -10,14 +11,14 @@ ascii_char = list(
 class VideoToAscii:
     # VideoToAscii("../end_video.mp4", "d://", print).video_to_ascii()
     def __init__(
-            self, input_file_name, output_path, msg_callback, color_radio=1, scale_scale=100
+        self, input_file_name, output_path, msg_callback, color_radio=1, scale_scale=100
     ):
         self.input_file_name = input_file_name
         self.output_path = output_path
         self.output_file_name_prefix = (
-                self.output_path
-                + "/"
-                + os.path.basename(self.input_file_name).split(".")[0]
+            self.output_path
+            + "/"
+            + os.path.basename(self.input_file_name).split(".")[0]
         )
         self.message = msg_callback
         self.color_radio = color_radio  # (1是彩色模式 其他是黑白模式)

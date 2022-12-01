@@ -1,18 +1,13 @@
 # --coding:utf-8--
-import re
-from dataclasses import dataclass, field
 from typing import List, Optional
 
-import flet
 import flet as ft
 from flet import (
     Container,
     Column,
     Row,
-    Page,
     TextField,
     Stack,
-    Ref,
     FloatingActionButton,
     ElevatedButton,
     TextButton,
@@ -24,6 +19,7 @@ from flet import (
     Card,
     alignment,
 )
+
 from methods.getbooks import DataNovelInfo, DataChapter, ZXCS
 
 
@@ -410,6 +406,7 @@ class ViewPage(ft.ResponsiveRow):
         else:
             self.right_section.visible = True
         self.update()
+
 
 # def main(page: Page):
 #     page.title = "Flet counter example"

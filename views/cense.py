@@ -1,8 +1,9 @@
-import flet as ft
 import json
-import os
-from utils import snack_bar, DESKTOP
+
+import flet as ft
+
 from methods.video2ascii import VideoToAscii
+from utils import snack_bar, DESKTOP
 
 
 class ViewPage(ft.Row):
@@ -38,11 +39,11 @@ class ViewPage(ft.Row):
                         ft.Row([self.start_btn]),
                         ft.Row([self.progress]),
                     ],
-                    alignment="center"
+                    alignment="center",
                 )
             ],
             alignment="center",
-            expand=True
+            expand=True,
         )
 
     def choose_video(self, _):
