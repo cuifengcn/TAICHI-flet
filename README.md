@@ -20,7 +20,11 @@
 ## 抚琴——磁力链接聚合搜索
 ![抚琴](./docs/lyra.png)
 
+## 百宝箱——目前只能pdf转word
+![百宝箱](./docs/treasure.png)
 ## 使用方法
+注： output文件加下面又打包好的，可以解压使用
+
 下载本项目
 `
 python -m pip install -r requirements.txt
