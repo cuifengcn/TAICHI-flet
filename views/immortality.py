@@ -20,7 +20,8 @@ from flet import (
     alignment,
 )
 
-from methods.getbooks import DataNovelInfo, DataChapter, ZXCS
+from methods.getbooks import DataNovelInfo, DataChapter, ZXCS, DingDian
+from utils import SRCImage
 
 
 class Novel(Row):
@@ -28,7 +29,7 @@ class Novel(Row):
         self.novel_info = novel_info
         self.read_callback = read_callback
         self.download_callback = download_callback
-        self.image = Image(
+        self.image = SRCImage(
             src=novel_info.img_url, width=30, height=30, border_radius=5, fit="cover"
         )
         self.name = Text(
@@ -64,12 +65,12 @@ class Novel(Row):
         self.read_btn = ElevatedButton(
             "阅读", height=30, on_click=lambda _: self.read_callback(self)
         )
-        if not novel_info.read_available():
+        if not novel_info.readable:
             self.read_btn.visible = False
         self.download_btn = ElevatedButton(
             "下载", height=30, on_click=lambda _: self.download_callback(self)
         )
-        if not self.novel_info.download_available():
+        if not self.novel_info.downloadable:
             self.download_btn.visible = False
         self.row1 = Row(
             controls=[self.image, self.name, self.author],
@@ -157,7 +158,7 @@ class SearchDisplay(ListView):
 
 
 class RightDisplaySection(Column):
-    def __init__(self, parent: "ViewPage"):
+    def __init__(self, parent: "_ViewPage"):
         self.parent = parent
         self.search_area = SearchComponent(self.search_callback)
         self.show_area = SearchDisplay(self.read_callback, self.download_callback)
@@ -351,18 +352,16 @@ class LeftWatchSection(Column):
         )
 
     def content_callback(self, chapter_name):
-        url = self.curr_novel.get_chapter_url(chapter_name)
-        # 通过url获取此章节内容
-        content = ZXCS.get_chapter_content(url)
+        content = self.curr_novel.get_chapter_content(chapter_name)
         self.content.put_content(content)
 
 
-class ViewPage(ft.ResponsiveRow):
+class _ViewPage(ft.ResponsiveRow):
     def __init__(self, page):
-        self.book_api = ZXCS
+        self.book_api = DingDian
         self.left_section = LeftWatchSection(self)
         self.right_section = RightDisplaySection(self)
-        super(ViewPage, self).__init__(
+        super(_ViewPage, self).__init__(
             controls=[self.left_section, self.right_section],
             expand=True,
             alignment="spaceAround",
@@ -373,7 +372,7 @@ class ViewPage(ft.ResponsiveRow):
     def init_event(self):
         if self.right_section.show_area.empty:
             flag = False
-            for book in ZXCS.recommend_books():
+            for book in self.book_api.recommend_books():
                 if not flag:
                     self.right_section.show_area.clear_novels()
                     flag = True
@@ -381,19 +380,11 @@ class ViewPage(ft.ResponsiveRow):
 
     def start_read(self, novel: DataNovelInfo):
         # 开始阅读
-        def get_chapters():
-            _chapters: List[DataChapter] = ZXCS.get_chapters_list(
-                novel.bid, novel.catalog
-            )
-            return _chapters
-
         self.left_section.curr_novel = novel
-
-        chapters = get_chapters()
-        novel.set_chapters(chapters)
+        novel.parse_chapters()
 
         self.left_section.tip.update_tip(novel.name, novel.author)
-        self.left_section.control.update_chapters(novel.get_chapters_name())
+        self.left_section.control.update_chapters(novel.get_chapter_names())
         self.left_section.control.select_chapter()
         self.update()
 
@@ -407,6 +398,39 @@ class ViewPage(ft.ResponsiveRow):
             self.right_section.visible = True
         self.update()
 
+
+class ViewPage(ft.Stack):
+    def __init__(self, page):
+        self.content = _ViewPage(page)
+        self.resource_select = Dropdown(
+            text_size=10,
+            width=80,
+            height=50,
+            content_padding=3,
+            value="顶点小说",
+            options=[dropdown.Option("顶点小说"), dropdown.Option("知轩藏书")],
+            on_change=self.change_resource,
+        )
+        super(ViewPage, self).__init__(
+            controls=[
+                self.content,
+                Container(self.resource_select, top=10, right=10),
+            ],
+            expand=True,
+        )
+
+    def init_event(self):
+        self.content.init_event()
+
+    def change_resource(self, e):
+        if self.resource_select.value == "顶点小说":
+            if self.content.book_api != DingDian:
+                self.content.book_api = DingDian
+                self.content.right_section.search_area.search()
+        elif self.resource_select.value == "知轩藏书":
+            if self.content.book_api != ZXCS:
+                self.content.book_api = ZXCS
+                self.content.right_section.search_area.search()
 
 # def main(page: Page):
 #     page.title = "Flet counter example"

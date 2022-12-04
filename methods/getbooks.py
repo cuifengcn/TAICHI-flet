@@ -1,38 +1,103 @@
 import re
 from dataclasses import dataclass, field
-from typing import List, Generator
+from typing import List, Generator, Literal
 
 from utils import HTMLSession
 
 
 @dataclass
 class DataChapter:
-    name: str
-    url: str
+    name: str  # 章节名称
+    url: str  # 章节链接
 
 
-@dataclass
 class DataNovelInfo:
-    img_url: str = ""
-    name: str = ""
-    author: str = ""
-    tag: str = ""
-    size: str = ""
-    introduction: str = ""
-    read_url: str = ""
-    download_url: str = ""
-    bid: str = ""
-    cid: str = "1"
-    catalog: str = "1"
-    chapters: List[DataChapter] = field(default_factory=lambda: [])
+    def __init__(
+        self,
+        img_url="",
+        name="",
+        author="",
+        tag="",
+        size="",
+        introduction="",
+        read_url="",
+        download_url="",
+    ):
+        self.img_url = img_url
+        self.name = name
+        self.author = author
+        self.tag = tag
+        self.size = size
+        self.introduction = introduction
+        self.read_url = read_url
+        self.download_url = download_url
+        if not hasattr(self, "chapters"):
+            self.chapters: List[DataChapter] = []  # 章节列表
 
-    def read_available(self):
+    def __str__(self):
+        return (
+            f"img_url={self.img_url},name={self.name},"
+            f"author={self.author},introduction={self.introduction},"
+            f"readable={self.readable}, downloadable={self.downloadable}"
+        )
+
+    @property
+    def readable(self):
+        raise NotImplementedError
+
+    @property
+    def downloadable(self):
+        raise NotImplementedError
+
+    def get_size(self):
+        raise NotImplementedError
+
+    def parse_chapters(self):
+        raise NotImplementedError
+
+    def get_chapter_names(self):
+        return [i.name for i in self.chapters]
+
+    def get_chapter_content(self, chapter_name):
+        raise NotImplementedError
+
+
+class ZXCSDataNovelInfo(DataNovelInfo):
+    def __init__(
+        self,
+        img_url,
+        name,
+        author,
+        tag,
+        size,
+        introduction,
+        read_url,
+        download_url,
+        bid,
+    ):
+        self.bid = bid
+        self.cid = "1"
+        self.catalog = "1"
+        super(ZXCSDataNovelInfo, self).__init__(
+            img_url,
+            name,
+            author,
+            tag,
+            size,
+            introduction,
+            read_url,
+            download_url,
+        )
+
+    @property
+    def readable(self):
         if self.read_url:
             return True
         else:
             return False
 
-    def download_available(self):
+    @property
+    def downloadable(self):
         if self.download_url:
             return True
         else:
@@ -42,21 +107,15 @@ class DataNovelInfo:
         regx = re.compile(r"\d+\.+\d+[ ]*[MmgGkbKB]*")
         return " ".join(regx.findall(self.size))
 
-    def chapter_list_param(self):
-        # 获取章节列表的链接
-        return self.bid, 1
-
-    def set_chapters(self, chapters):
+    def parse_chapters(self):
+        _chapters: List[DataChapter] = ZXCS.get_chapters_list(self.bid, self.catalog)
         self.chapters.clear()
-        self.chapters.extend(chapters)
+        self.chapters.extend(_chapters)
 
-    def get_chapters_name(self):
-        return [i.name for i in self.chapters]
-
-    def get_chapter_url(self, chapter_name):
+    def get_chapter_content(self, chapter_name):
         for chapter in self.chapters:
             if chapter.name == chapter_name:
-                return chapter.url
+                return ZXCS.get_chapter_content(chapter.url)
         return ""
 
 
@@ -87,6 +146,7 @@ class ZXCS:
 
     @classmethod
     def search_books(cls, keyword):
+        print("zx")
         if not keyword:
             for book in cls.recommend_books():
                 yield book
@@ -131,7 +191,7 @@ class ZXCS:
         bid: str = download_url.split("=")[-1]
         if not bid.isdigit():
             bid = ""
-        novel = DataNovelInfo(
+        novel = ZXCSDataNovelInfo(
             img_url=img_url,
             name=book_name,
             author=author_name,
@@ -164,5 +224,103 @@ class ZXCS:
         session = HTMLSession()
         resp = session.post(url, data={"bid": bid, "cid": cid})
         content = resp.html.full_text
-        content = content.replace("\n", "\n\n")
+        # content = content.replace("\n", "\n\n")
+        return content
+
+
+class DingDianDataNovelInfo(DataNovelInfo):
+    def __init__(self, img_url, name, author, introduction, chapters):
+        self.chapters = chapters
+        super(DingDianDataNovelInfo, self).__init__(
+            img_url, name, author, introduction=introduction
+        )
+
+    @property
+    def readable(self):
+        return True
+
+    @property
+    def downloadable(self):
+        return False
+
+    def get_size(self):
+        return ""
+
+    def parse_chapters(self):
+        pass
+
+    def get_chapter_content(self, chapter_name):
+        for chapter in self.chapters:
+            if chapter.name == chapter_name:
+                return DingDian.get_chapter_content(chapter.url)
+        return ""
+
+
+class DingDian:
+    """顶点小说"""
+
+    rank_url = "https://www.23usp.com/paihangbang/allvote.html"  # 排行榜
+    base_url = "https://www.23usp.com/"
+    all_books_url = "https://www.23usp.com/quanbuxiaoshuo/"
+
+    @classmethod
+    def recommend_books(cls) -> Generator[DataNovelInfo, None, None]:
+        session = HTMLSession()
+        resp = session.get(cls.rank_url)
+        rank_list = resp.html.xpath(
+            '//div[@class="box b2"]//li[not(@class="ltitle")]//a[@href]'
+        )
+        if not rank_list:
+            return
+        for a in rank_list:
+            if a.attrs.get("href") and a.attrs["href"].startswith("http"):
+                yield cls.get_book_detail(a.attrs["href"])
+
+    @classmethod
+    def search_books(cls, keyword) -> Generator[DataNovelInfo, None, None]:
+        if not keyword:
+            for book in cls.recommend_books():
+                yield book
+        else:
+            session = HTMLSession()
+            all_books_resp = session.get(cls.all_books_url)
+            all_books_resp.encoding = "gbk"
+            uls = all_books_resp.html.xpath('//div[@class="novellist"]/ul')
+            filter_books = []
+            for ul in uls:
+                lis = ul.xpath("//ul/li")
+                for li in lis:
+                    if keyword in li.text:
+                        filter_books.append(li.absolute_links.pop())
+            for url in filter_books:
+                yield cls.get_book_detail(url)
+
+    @classmethod
+    def get_book_detail(cls, url) -> DataNovelInfo:
+        session = HTMLSession()
+        resp = session.get(url)
+        img_url = resp.html.xpath('//div[@id="fmimg"]//img[@src]')[0].attrs["src"]
+        book_info = resp.html.xpath('//div[@id="maininfo"]')[0]
+        book_name = book_info.xpath('//div[@id="info"]//h1')[0].text
+        author_name = book_info.xpath('//div[@id="info"]//p[1]')[0].text
+        book_introduction = resp.html.xpath('//div[@id="intro"]')[0].text
+        chapters = resp.html.xpath('//div[@id="list"]//a[@href]')
+        all_chapters = []
+        for c in chapters:
+            all_chapters.append(DataChapter(name=c.text, url=c.absolute_links.pop()))
+        novel = DingDianDataNovelInfo(
+            img_url=img_url,
+            name=book_name,
+            author=author_name,
+            introduction=book_introduction,
+            chapters=all_chapters,
+        )
+        return novel
+
+    @classmethod
+    def get_chapter_content(cls, sub_url):
+        session = HTMLSession()
+        resp = session.get(sub_url)
+        content = resp.html.xpath('//div[@id="content"]')[0].text
+        # content = content.replace("\n", "\n\n")
         return content

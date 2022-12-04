@@ -21,7 +21,10 @@ class ViewPage(Stack):
     def __init__(self, page: Page):
         self.page = page
         self.resource_select = Dropdown(
-            width=150,
+            text_size=10,
+            width=80,
+            height=50,
+            content_padding=3,
             value="ciyuandao",
             options=[dropdown.Option("ciyuandao"), dropdown.Option("2meinv")],
             on_change=self.fresh_image,

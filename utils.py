@@ -1,11 +1,12 @@
 # coding:utf-8
+import base64
 import os
 import time
 from pathlib import Path
 from threading import Thread
 from typing import Optional
 
-from flet import SnackBar, Text
+from flet import SnackBar, Text, Image as _Image
 from requests_html import HTMLSession as _HTMLSession, HTMLResponse
 
 """"""
@@ -13,6 +14,19 @@ CURR_PATH = Path(__file__).absolute().parent
 DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop")
 CACHE = CURR_PATH.joinpath("Cache")
 CACHE.mkdir(parents=True, exist_ok=True)
+
+
+class CORSImage(_Image):
+    cors_url = "https://pc-cors.elitb.com/proxy?url="
+
+    def __init__(self, *args, **kwargs):
+        if "src" in kwargs:
+            kwargs["src"] = self.cors_url + kwargs["src"]
+            print(kwargs["src"])
+        else:
+            if args:
+                args = (self.cors_url + args[0],) + args[1:]
+        super(CORSImage, self).__init__(*args, **kwargs)
 
 
 def snack_bar(page, message):
@@ -77,6 +91,18 @@ def download_named_image(url):
     file_name = url.split("/")[-1]
 
     resp = session.get(url)
+
+class SRCImage(_Image):
+    session = HTMLSession()
+
+    def __init__(self, *args, **kwargs):
+        if "src" not in kwargs:
+            kwargs["src"] = args[0]
+            args = args[1:]
+        session = HTMLSession()
+        resp = session.get(kwargs.pop("src"))
+        kwargs["src_base64"] = base64.b64encode(resp.content).decode()
+        super(SRCImage, self).__init__(*args, **kwargs)
 
 
 """"""
