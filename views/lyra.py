@@ -241,6 +241,16 @@ class ViewPage(ft.ResponsiveRow):
         self.page.splash.visible = False
         self.page.update()
 
+    def show_details(self, content: BTContent):
+        if content.bt.source == "磁力猫":
+            api = self.apis[0]
+        elif content.bt.source == "torrentkitty":
+            api = self.apis[1]
+        else:
+            api = self.apis[0]
+        details = api.detail(content.bt.detail_url)
+        content.set_details(details)
+
 
 # def main(page: ft.Page):
 #     page.vertical_alignment = "center"

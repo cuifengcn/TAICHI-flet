@@ -21,7 +21,7 @@ from flet import (
 )
 
 from methods.getbooks import DataNovelInfo, DataChapter, ZXCS, DingDian
-from utils import SRCImage
+from utils import SRCImage, snack_bar
 
 
 class Novel(Row):
@@ -175,13 +175,20 @@ class RightDisplaySection(Column):
         self.page.splash.visible = True
         self.page.update()
         flag = False
-        for book in self.parent.book_api.search_books(search_target):
-            if not flag:
-                self.page.splash.visible = False
-                self.show_area.clear_novels()
-                self.page.update()
-                flag = True
-            self.show_area.add_novel(book)
+        try:
+            for book in self.parent.book_api.search_books(search_target):
+                if not flag:
+                    self.page.splash.visible = False
+                    self.show_area.clear_novels()
+                    self.page.update()
+                    flag = True
+                self.show_area.add_novel(book)
+        except Exception as e:
+            snack_bar(self.page, f"搜索小说出错：{e}")
+        if not flag:
+            snack_bar(self.page, f"没有搜索到小说：{search_target}")
+        self.page.splash.visible = False
+        self.page.update()
 
     def read_callback(self, novel: Novel):
         self.parent.start_read(novel.novel_info)
@@ -406,7 +413,7 @@ class ViewPage(ft.Stack):
             text_size=10,
             width=80,
             height=50,
-            content_padding=3,
+            content_padding=10,
             value="顶点小说",
             options=[dropdown.Option("顶点小说"), dropdown.Option("知轩藏书")],
             on_change=self.change_resource,

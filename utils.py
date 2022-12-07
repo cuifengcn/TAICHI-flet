@@ -22,7 +22,6 @@ class CORSImage(_Image):
     def __init__(self, *args, **kwargs):
         if "src" in kwargs:
             kwargs["src"] = self.cors_url + kwargs["src"]
-            print(kwargs["src"])
         else:
             if args:
                 args = (self.cors_url + args[0],) + args[1:]
@@ -92,6 +91,7 @@ def download_named_image(url):
 
     resp = session.get(url)
 
+
 class SRCImage(_Image):
     session = HTMLSession()
 
@@ -99,9 +99,13 @@ class SRCImage(_Image):
         if "src" not in kwargs:
             kwargs["src"] = args[0]
             args = args[1:]
-        session = HTMLSession()
-        resp = session.get(kwargs.pop("src"))
-        kwargs["src_base64"] = base64.b64encode(resp.content).decode()
+        try:
+            session = HTMLSession()
+            resp = session.get(kwargs["src"])
+            kwargs["src_base64"] = base64.b64encode(resp.content).decode()
+            kwargs.pop("src")
+        except:
+            pass
         super(SRCImage, self).__init__(*args, **kwargs)
 
 

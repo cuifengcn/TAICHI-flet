@@ -262,11 +262,11 @@ class DingDian:
     rank_url = "https://www.23usp.com/paihangbang/allvote.html"  # 排行榜
     base_url = "https://www.23usp.com/"
     all_books_url = "https://www.23usp.com/quanbuxiaoshuo/"
+    session = HTMLSession()
 
     @classmethod
     def recommend_books(cls) -> Generator[DataNovelInfo, None, None]:
-        session = HTMLSession()
-        resp = session.get(cls.rank_url)
+        resp = cls.session.get(cls.rank_url)
         rank_list = resp.html.xpath(
             '//div[@class="box b2"]//li[not(@class="ltitle")]//a[@href]'
         )
@@ -282,8 +282,7 @@ class DingDian:
             for book in cls.recommend_books():
                 yield book
         else:
-            session = HTMLSession()
-            all_books_resp = session.get(cls.all_books_url)
+            all_books_resp = cls.session.get(cls.all_books_url)
             all_books_resp.encoding = "gbk"
             uls = all_books_resp.html.xpath('//div[@class="novellist"]/ul')
             filter_books = []
@@ -297,12 +296,11 @@ class DingDian:
 
     @classmethod
     def get_book_detail(cls, url) -> DataNovelInfo:
-        session = HTMLSession()
-        resp = session.get(url)
+        resp = cls.session.get(url)
         img_url = resp.html.xpath('//div[@id="fmimg"]//img[@src]')[0].attrs["src"]
         book_info = resp.html.xpath('//div[@id="maininfo"]')[0]
         book_name = book_info.xpath('//div[@id="info"]//h1')[0].text
-        author_name = book_info.xpath('//div[@id="info"]//p[1]')[0].text
+        author_name = book_info.xpath('//div[@id="info"]//p[1]')[0].text.split("：")[-1]
         book_introduction = resp.html.xpath('//div[@id="intro"]')[0].text
         chapters = resp.html.xpath('//div[@id="list"]//a[@href]')
         all_chapters = []
@@ -319,8 +317,7 @@ class DingDian:
 
     @classmethod
     def get_chapter_content(cls, sub_url):
-        session = HTMLSession()
-        resp = session.get(sub_url)
+        resp = cls.session.get(sub_url)
         content = resp.html.xpath('//div[@id="content"]')[0].text
         # content = content.replace("\n", "\n\n")
         return content
