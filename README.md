@@ -1,6 +1,9 @@
 # TAICHI-flet
  基于flet的一款windows桌面应用，实现了爬取图片、音乐、小说、磁力链接的功能。
- 特点：多功能娱乐软件，界面美观、简洁。会持续更新
+
+ 特点：多功能娱乐软件，界面美观、简洁。
+ 
+会持续更新
 
 ## 主页
 ![主页](./docs/main.png)
@@ -23,14 +26,9 @@
 ## 百宝箱——目前只能pdf转word
 ![百宝箱](./docs/treasure.png)
 ## 使用方法
-注： output文件加下面又打包好的，可以解压使用
+方法1. 下载源代码，安装`requirements.txt`中的包，运行`run.py`文件。
 
-下载本项目
-`
-python -m pip install -r requirements.txt
-`
-安装后，运行`ui.py`文件
-打包请自行使用`pyinstaller`或`auto-py-to-exe`进行打包
+方法2. 下载[release](https://github.com/cuifengcn/TAICHI-flet/releases/tag/publish)文件，解压后运行`太极.exe`文件
 
 ## 交流
 ![公众号](./docs/gongzhonghao.jpg)
