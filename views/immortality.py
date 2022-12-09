@@ -14,13 +14,12 @@ from flet import (
     ListView,
     Dropdown,
     dropdown,
-    Image,
     Text,
     Card,
     alignment,
 )
 
-from methods.getbooks import DataNovelInfo, DataChapter, ZXCS, DingDian
+from methods.getbooks import DataNovelInfo, ZXCS, DingDian
 from utils import SRCImage, snack_bar
 
 
@@ -438,6 +437,7 @@ class ViewPage(ft.Stack):
             if self.content.book_api != ZXCS:
                 self.content.book_api = ZXCS
                 self.content.right_section.search_area.search()
+
 
 # def main(page: Page):
 #     page.title = "Flet counter example"

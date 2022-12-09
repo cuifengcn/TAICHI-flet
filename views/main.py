@@ -2,7 +2,7 @@ from functools import partial
 from math import pi
 from random import randint
 
-from flet import Container, alignment, animation, transform, Stack
+from flet import Container, alignment, animation, transform, Stack, Text
 from flet import Switch, Page
 
 from statics import BIG_TAICHI, CLOUD, GONGZHONGHAO
@@ -67,8 +67,10 @@ class ViewPage(Stack):
             self.clouds.append(_cloud)
         self.theme_switch = ThemeSwitch(self.page)
         self.gzh_img = Container(content=GONGZHONGHAO, right=5, bottom=5)
+        self.warn_text = Text("数据均来源于网络，与本人无关！请自行判断数据的准确性！", right=20, bottom=1)
         super(ViewPage, self).__init__(
-            controls=[self.bg, self.theme_switch, self.gzh_img] + self.clouds,
+            controls=[self.bg, self.theme_switch, self.gzh_img, self.warn_text]
+            + self.clouds,
             expand=True,
         )
         self.init_animate()

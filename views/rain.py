@@ -156,6 +156,14 @@ class MusicList(Row):
         self.list.controls.append(Song(data, self.middle_select_callback))
         self.update()
 
+    def next_music(self):
+        c = self.list.controls
+        for i in range(len(c) - 1):
+            if c[i].selected:
+                c[i + 1].on_click(None)
+                return
+        c[0].on_click(None)
+
     def middle_select_callback(self, song: Song):
         for _song in self.list.controls:
             if _song.selected:
@@ -202,7 +210,8 @@ class AudioBar(Row):
     播放进度条和控制按钮
     """
 
-    def __init__(self):
+    def __init__(self, root: 'ViewPage'):
+        self.root = root
         self.song: Optional[DataSong] = None
         self.playing_audio: Optional[PlayAudio] = None
         self.is_sliding = False
@@ -224,6 +233,12 @@ class AudioBar(Row):
             on_click=self.toggle_play,
             icon_size=40,
         )
+        self.play_type_btn = IconButton(
+            icon=icons.PLAYLIST_PLAY_ROUNDED,
+            selected_icon=icons.REPLAY_CIRCLE_FILLED_ROUNDED,
+            on_click=self.toggle_play_type,
+            icon_size=40,
+        )
         self.row1 = Row(
             controls=[
                 self.curr_time,
@@ -232,7 +247,7 @@ class AudioBar(Row):
                 self.popup_menu,
             ]
         )
-        self.row2 = Row(controls=[self.play_btn])
+        self.row2 = Row(controls=[self.play_btn, self.play_type_btn])
         super(AudioBar, self).__init__(
             controls=[Column([self.row1, self.row2], horizontal_alignment="center")],
             alignment="center",
@@ -265,7 +280,7 @@ class AudioBar(Row):
                 autoplay=False,
                 volume=100,
                 balance=0,
-                release_mode=audio.ReleaseMode.LOOP,
+                release_mode=audio.ReleaseMode.STOP,
                 on_loaded=self.loaded,
                 on_duration_changed=self.during_changed,
                 on_position_changed=self.position_changed,
@@ -286,6 +301,9 @@ class AudioBar(Row):
         self.playing_audio.pause()
         self.play_btn.selected = True
         self.update()
+
+    def next_music(self, e=None):
+        self.root.right_widget.music_list.next_music()
 
     def release(self):
         self.playing_audio.release()
@@ -313,6 +331,11 @@ class AudioBar(Row):
         )
         if not self.is_sliding:
             self.control_bar.value = percent
+            # if during == self.playing_audio.during != 0:
+            #         print(during)
+            #         print(self.playing_audio.during)
+            #         self.next_music(None)
+
         self.update()
 
     def state_changed(self, e):
@@ -320,6 +343,11 @@ class AudioBar(Row):
         if status == "playing":
             self.play_btn.selected = True
         else:
+            if status == "completed":
+                if self.play_type_btn.selected:
+                    self.playing_audio.play()
+                else:
+                    self.next_music(None)
             self.play_btn.selected = False
         self.update()
 
@@ -331,6 +359,10 @@ class AudioBar(Row):
             self.pause()
         else:
             self.resume()
+
+    def toggle_play_type(self, e):
+        self.play_type_btn.selected = not e.control.selected
+        self.update()
 
     def on_change_start(self, e):
         self.is_sliding = True
@@ -378,7 +410,7 @@ class LeftPlaySection(Column):
         self.parent = parent
         self.playing_song: Optional[PlayAudio] = None
         self.audio_info = AudioInfo()
-        self.audio_bar = AudioBar()
+        self.audio_bar = AudioBar(self.parent)
         super(LeftPlaySection, self).__init__(
             controls=[self.audio_info, self.audio_bar],
             alignment="center",
