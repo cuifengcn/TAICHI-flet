@@ -1,6 +1,7 @@
 # coding:utf-8
 import base64
 import os
+import re
 import time
 from pathlib import Path
 from threading import Thread
@@ -12,6 +13,7 @@ from requests_html import HTMLSession as _HTMLSession, HTMLResponse
 """"""
 CURR_PATH = Path(__file__).absolute().parent
 DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop")
+PICTURE = os.path.join(os.path.expanduser("~"), "Pictures")
 CACHE = CURR_PATH.joinpath("Cache")
 CACHE.mkdir(parents=True, exist_ok=True)
 
@@ -88,11 +90,15 @@ def download_url_content(url) -> HTMLResponse:
 
 
 def download_named_image(url):
-    print(url)
+    regx = re.compile(r'/([\w\-]*\.[a-zA-Z]*)\??')
+    file_name = regx.findall(url)[-1]
     session = HTMLSession()
-    file_name = url.split("/")[-1]
-
+    p = Path(PICTURE).joinpath("taichi")
+    p.mkdir(exist_ok=True)
     resp = session.get(url)
+    f = p.joinpath(file_name)
+    f.write_bytes(resp.content)
+    return f
 
 
 class SRCImage(_Image):
