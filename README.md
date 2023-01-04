@@ -38,4 +38,5 @@
 方法2. 下载[release](https://github.com/cuifengcn/TAICHI-flet/releases/tag/publish)文件，解压后运行`太极.exe`文件
 
 ## 交流
-![公众号](./docs/gongzhonghao.jpg)
+
+[//]: # (![公众号]&#40;./docs/gongzhonghao.jpg&#41;)
