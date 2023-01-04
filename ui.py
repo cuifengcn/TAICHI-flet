@@ -3,7 +3,7 @@ from importlib import import_module
 import flet
 
 try:
-    from views import cense, immortality, lyra, main, mountain, rain, treasure
+    from views import cense, immortality, lyra, main, mountain, rain, treasure, buddhist
     from views.treasure_dialogs import pdf2word
 except:
     pass
