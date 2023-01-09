@@ -6,9 +6,9 @@
 会持续更新
 
 ## 使用方法
-方法1. 下载源代码，安装`requirements.txt`中的包，运行`run.py`文件。
+方法1. 下载源代码，安装`requirements.txt`中的包，运行`ui.py`文件。
 
-方法2. 下载[release](https://github.com/cuifengcn/TAICHI-flet/releases/tag/publish)文件，解压后运行`太极.exe`文件
+方法2. 使用pyinstaller打包
 
 
 ## 主页
