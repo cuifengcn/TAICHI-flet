@@ -1,4 +1,22 @@
-# TAICHI-flet
+<p align="center">
+  <a href="https://github.com/cuifengcn/wechat-video-generate">
+    <img width="200" height="200" src="https://github.com/cuifengcn/TAICHI-flet/blob/main/taiji.png" alt="TAICHI-flet">
+  </a>
+</p>
+
+<h1 align="center">TAICHI-flet</h1>
+
+<p align="center">
+  <a href="#下载">
+    <img src="https://img.shields.io/github/downloads/cuifengcn/TAICHI-flet/total?style=flat-square" alt="forks">
+  </a>
+  <img src="https://img.shields.io/github/stars/cuifengcn/TAICHI-flet?style=flat-square" alt="stars">
+  <img src="https://img.shields.io/github/forks/cuifengcn/TAICHI-flet?style=flat-square" alt="forks">
+</p>
+
+---
+
+
  基于flet的一款windows桌面应用，实现了爬取图片、音乐、小说、磁力链接的功能。
 
  特点：多功能娱乐软件，界面美观、简洁。
