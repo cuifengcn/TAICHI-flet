@@ -23,16 +23,63 @@
  
 会持续更新
 
-【预告】1.2.0 新版本新界面在搞了，好看的一批，并且届时会取消网络错误和更新强制弹窗
+## 最新版本
 
-![image](https://user-images.githubusercontent.com/38805177/224538021-e7ceef9d-0966-447e-8f5c-6f3ddf6aede7.png)
+2023/03/24
+
+【版本1.1.8】
+
+功能介绍
+
+1. 首页
+
+![首页](https://user-images.githubusercontent.com/38805177/227417740-8413c23d-ab12-4112-8edf-909a333ed627.png)
+
+2. 观山——图片浏览，风景图、妹子图、二次元图等
+
+![观山](https://user-images.githubusercontent.com/38805177/227417883-bce5605f-0d20-412e-9ed8-91a30eb83655.png)
+
+3. 听雨——音乐收藏、试听
+
+![听雨](https://user-images.githubusercontent.com/38805177/227417991-9cdf4df1-c122-43ee-a5e7-56c6a15268b4.png)
+
+4. 修仙——小说搜索、阅读
+
+![修仙](https://user-images.githubusercontent.com/38805177/227418187-6de03b81-1cb3-4fa5-a175-4832a058d959.png)
+
+5. 抚琴——云盘资源搜索
+
+![抚琴](https://user-images.githubusercontent.com/38805177/227418251-6a177423-ac32-4e54-b3c3-c65e91841b35.png)
+
+6. 小站——资源查找
+
+![小站](https://user-images.githubusercontent.com/38805177/227418324-0c4c44a9-5050-4643-9864-b5cd7ccdf4e4.png)
+
+7. 览竹——动漫搜索、观看
+
+![览竹](https://user-images.githubusercontent.com/38805177/227418394-bcecfec5-1518-438c-bd56-5bc75c58d514.png)
+
+8. 藏卷——资源、网站推荐
+
+![藏卷](https://user-images.githubusercontent.com/38805177/227418484-b265bab7-6f75-491a-9811-5a0959548e4b.png)
+
+相对上版本的更新内容有
+
+* 取消强制更新，网络错误完全修复
+* 新增小站和览竹
+* 每个页面有了更多的源
+* 背景图片自定义
+*  启动更流畅，默认加载
 
 
-【版本更新】 **1.1.0版本**
+## 交流群(2023/03/24)
 
-**公众号暂时无法关注！**
 
-**更新方式:关注公众号【破哥科技】,回复"太极"获取下载地址**
+
+
+## 历史版本
+
+【版本更新】 1.1.0版本
 
 更新内容
 
@@ -61,23 +108,3 @@ https://wwtn.lanzout.com/iMWmx0orev3a
 1. 观山增加【IMGAPI】源 2. 听雨可将歌曲添加到歌单 3. 修仙页面分离，可以调整阅读效果
 
 
-## 主页
-![主页](./docs/主页.png)
-
-## 观山——妹子图浏览
-![观山](./docs/观山.png)
-
-## 听雨——音乐播放下载
-![听雨](./docs/听雨.png)
-
-## 修仙——小说阅读
-![修仙](./docs/修仙.png)
-
-## 抚琴——磁力链接聚合搜索
-![抚琴](./docs/抚琴.png)
-
-## 百宝箱——目前只能pdf转word
-![百宝箱](./docs/百宝囊.png)
-
-## 藏经阁——好用的软件等推荐
-![藏经阁](./docs/藏经阁.png)
