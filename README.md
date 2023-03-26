@@ -76,7 +76,8 @@
 
 ## 交流群(2023/03/24)
 
-![b9f9ea91651cea8a383b4d0e60d58f3](https://user-images.githubusercontent.com/38805177/227420261-d005249b-9908-4339-a30d-94b1d5dec97d.jpg)
+![太极交流群四](https://user-images.githubusercontent.com/38805177/227751799-9bee0e7c-e1f9-47d5-b9ae-76f426d9c213.jpg)
+
 
 
 
