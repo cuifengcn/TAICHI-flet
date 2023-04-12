@@ -95,7 +95,8 @@
 
 ## 交流群(2023/03/29)
 
-![太极交流群五](https://user-images.githubusercontent.com/38805177/230147161-9fec00d5-f866-4d18-9489-1e3abf819687.jpg)
+
+![太极交流群六](https://user-images.githubusercontent.com/38805177/231331595-d32c12f4-5ebd-4221-92fe-458b5c2ae01c.jpg)
 
 
 
