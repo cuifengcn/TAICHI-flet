@@ -136,4 +136,6 @@ https://wwtn.lanzout.com/iMWmx0orev3a
 更新内容：
 1. 观山增加【IMGAPI】源 2. 听雨可将歌曲添加到歌单 3. 修仙页面分离，可以调整阅读效果
 
+## Star历史
 
+![Star History Chart](https://api.star-history.com/svg?repos=cuifengcn/TAICHI-flet&type=Date)
