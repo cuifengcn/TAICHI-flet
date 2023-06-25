@@ -27,11 +27,17 @@
 
 ## 最新版本
 
-2023/05/22
+2023/06/22
 
-太极2.5.1版下载地址
+太极2.5.5测试版
 
-https://wwtn.lanzout.com/iY58d0wnnpze
+https://wwtn.lanzout.com/iOCC20ytmehc
+
+密码:8888
+
+安卓版太极GPT下载地址(仅VIP可用)
+
+https://wwtn.lanzout.com/b0426gref
 
 密码:8888
 
@@ -86,8 +92,9 @@ https://wwtn.lanzout.com/iF4U60u4m6sb
 
 ## 交流群(2023/04/17)
 
+![40f4f28b362c65f2011a12d7ee9391b](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/e60e192c-48a4-4a28-836b-37378af2387e)
 
-![交流群六](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/7b8669b6-e7c3-4638-aefd-8088b0c9d6c0)
+
 
 ## Star历史
 
