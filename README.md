@@ -27,19 +27,27 @@
 
 ## 最新版本
 
-2023/06/22
+太极2.5.7版，欢迎使用
 
-太极2.5.5测试版
-
-https://wwtn.lanzout.com/iOCC20ytmehc
+https://wwtn.lanzout.com/i9Pob11utr5e
 
 密码:8888
 
-安卓版太极GPT下载地址(仅VIP可用)
+___
+
+安卓版《太极ChatGPT》下载地址(仅VIP可用)
 
 https://wwtn.lanzout.com/b0426gref
 
 密码:8888
+
+___
+
+安卓版《歌单助手》下载地址
+
+https://wwtn.lanzout.com/iazHV11twscj
+
+密码:6666
 
 
 
@@ -90,9 +98,10 @@ https://wwtn.lanzout.com/iF4U60u4m6sb
 
 ![藏卷](https://user-images.githubusercontent.com/38805177/227418484-b265bab7-6f75-491a-9811-5a0959548e4b.png)
 
-## 交流群(2023/04/17)
+## 交流群(2023/7/10)
 
-![40f4f28b362c65f2011a12d7ee9391b](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/e60e192c-48a4-4a28-836b-37378af2387e)
+![太极交流群七](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/8bc49412-39f8-46e0-a981-2ded7ccddccd)
+
 
 
 
