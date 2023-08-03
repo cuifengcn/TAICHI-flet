@@ -27,9 +27,9 @@
 
 ## 最新版本
 
-太极2.5.7版，欢迎使用
+太极2.5.9版，欢迎使用
 
-https://wwtn.lanzout.com/i9Pob11utr5e
+https://wwtn.lanzout.com/iek7X14bchof
 
 密码:8888
 
