@@ -50,15 +50,6 @@ https://wwtn.lanzout.com/iazHV11twscj
 密码:6666
 
 
-
-【版本2.4.0】
-
-最新下载地址：
-
-太极2.4.0正式版
-https://wwtn.lanzout.com/iF4U60u4m6sb
-密码:8888
-
 功能介绍
 
 1. 首页
@@ -98,12 +89,9 @@ https://wwtn.lanzout.com/iF4U60u4m6sb
 
 ![藏卷](https://user-images.githubusercontent.com/38805177/227418484-b265bab7-6f75-491a-9811-5a0959548e4b.png)
 
-## 交流群(2023/7/10)
+## 关注公众号了解更多功能
 
-![太极交流群七](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/8bc49412-39f8-46e0-a981-2ded7ccddccd)
-
-
-
+![image](https://github.com/cuifengcn/TAICHI-flet/assets/38805177/861e963c-4374-4232-921a-7d182c22729d)
 
 ## Star历史
 
