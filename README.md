@@ -35,6 +35,14 @@ https://wwtn.lanzout.com/iznoa14qx5fa
 
 ___
 
+太极2.6.1版，欢迎使用
+
+https://wwtn.lanzout.com/i70AW1578d0f
+
+密码:8888
+
+___
+
 安卓版《太极ChatGPT》下载地址(仅VIP可用)
 
 https://wwtn.lanzout.com/b0426gref
@@ -45,7 +53,7 @@ ___
 
 安卓版《歌单助手》下载地址
 
-https://wwtn.lanzout.com/iazHV11twscj
+https://wwtn.lanzout.com/iv2Wj153tejc
 
 密码:6666
 
