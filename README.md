@@ -25,19 +25,11 @@
  
 会持续更新
 
-## 最新版本(23年8月8日)
+## 最新版本(23年8月17日)
 
-太极2.6.0正式版，欢迎使用
+太极2.6.4版，欢迎使用
 
-https://wwtn.lanzout.com/iznoa14qx5fa
-
-密码:8888
-
-___
-
-太极2.6.1版，欢迎使用
-
-https://wwtn.lanzout.com/i70AW1578d0f
+https://wwtn.lanzout.com/i7kCS15o6xni
 
 密码:8888
 
