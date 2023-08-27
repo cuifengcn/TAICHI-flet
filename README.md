@@ -27,23 +27,23 @@
 
 ## 最新版本(23年8月17日)
 
-太极2.6.4版，欢迎使用
+电脑版 《太极》2.6.5版
 
-https://wwtn.lanzout.com/i7kCS15o6xni
-
-密码:8888
-
-___
-
-安卓版《太极ChatGPT》下载地址(仅VIP可用)
-
-https://wwtn.lanzout.com/b0426gref
+https://wwtn.lanzout.com/iwlsk16ccypg
 
 密码:8888
 
 ___
 
-安卓版《歌单助手》下载地址
+安卓版《太极ChatGPT》0.2.0下载地址(仅VIP可用)
+
+https://wwtn.lanzout.com/ibkpF16m45ze
+
+密码:8888
+
+___
+
+安卓版《歌单助手》0.1.8下载地址
 
 https://wwtn.lanzout.com/iv2Wj153tejc
 
