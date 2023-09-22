@@ -29,7 +29,7 @@
 
 电脑版 《太极》2.6.9版，欢迎使用
 
-https://wwtn.lanzout.com/i4TON19c1ahg
+https://wwtn.lanzout.com/i9mCJ19fleri
 
 密码:8888
 
