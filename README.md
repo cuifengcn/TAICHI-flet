@@ -25,11 +25,11 @@
  
 会持续更新
 
-## 最新版本(23年9月9日)
+## 最新版本(23年9月22日)
 
-电脑版 《太极》2.6.7版，欢迎使用
+电脑版 《太极》2.6.9版，欢迎使用
 
-https://wwtn.lanzout.com/iu56917rzqob
+https://wwtn.lanzout.com/i4TON19c1ahg
 
 密码:8888
 
