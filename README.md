@@ -25,30 +25,28 @@
  
 会持续更新
 
-## 最新版本(23年9月27日)
+## 最新版本(23年10月13日)
 
-电脑版 《太极》2.7.0版，欢迎使用
+为保证太极正常使用，请【手动下载安装2.7.1版本】，之前版本部分功能已无法正常使用。
+电脑版《太极》2.7.1下载地址
 
-https://wwtn.lanzout.com/iYXWF1a096kh
+https://wwtn.lanzout.com/iveBn1bnp1xa
 
-密码:8888
+---
 
-___
+安卓版《太极ChatGPT》0.3.0下载地址(仅VIP可用)
 
-安卓版《太极ChatGPT》0.2.0下载地址(仅VIP可用)
+https://wwtn.lanzout.com/i6YKf1a0akqd
 
-https://wwtn.lanzout.com/ibkpF16m45ze
-
-密码:8888
-
-___
+---
 
 安卓版《歌单助手》0.1.8下载地址
 
 https://wwtn.lanzout.com/iv2Wj153tejc
 
-密码:6666
+---
 
+为保证太极正常使用，请【手动下载安装2.7.1版本】，之前版本部分功能已无法正常使用。
 
 功能介绍
 
