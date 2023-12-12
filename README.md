@@ -25,13 +25,13 @@
  
 会持续更新
 
-## 最新版本(2023年12月04日)
+## 最新版本(2023年12月12日)
 
-为保证太极正常使用，请【安装2.7.5版本】
+为保证太极正常使用，请【安装2.7.6版本】
 
-电脑版《太极》2.7.5版本下载地址
+电脑版《太极》2.7.6版本下载地址
 
-https://wwtn.lanzout.com/iFYrU1gstv6h
+[https://wwtn.lanzout.com/iFYrU1gstv6h](https://wwtn.lanzout.com/iqWtV1ho089a)
 
 ---
 
