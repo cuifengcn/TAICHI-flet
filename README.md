@@ -31,7 +31,7 @@
 
 电脑版《太极》2.7.6版本下载地址
 
-[https://wwtn.lanzout.com/iFYrU1gstv6h](https://wwtn.lanzout.com/iqWtV1ho089a)
+https://wwtn.lanzout.com/iqWtV1ho089a
 
 ---
 
