@@ -25,19 +25,13 @@
  
 会持续更新
 
-## 最新版本(2023年12月22日)
+## 最新版本(2024年01月05日)
 
-为保证太极正常使用，请【安装2.7.7版本】
+为保证太极正常使用，请【安装2.7.8版本】
 
-电脑版《太极》2.7.7版本下载地址
+电脑版《太极》2.7.8版本下载地址
 
-https://wwtn.lanzout.com/iRGzP1ioazaj
-
----
-
-安卓版《太极ChatGPT》0.4.0下载地址(仅VIP可用)
-
-https://wwtn.lanzout.com/iVAa11io141a
+https://wwtn.lanzout.com/iztPw1k5ofja
 
 ---
 
