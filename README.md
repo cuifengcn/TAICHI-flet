@@ -25,13 +25,13 @@
  
 会持续更新
 
-## 最新版本(2024年10月24日)
+## 最新版本(2024年10月26日)
 
 为保证太极正常使用，请【安装2.9.6版本】
 
 电脑版《太极》2.9.6版本下载地址
 
-https://wwtn.lanzout.com/iItb92da2keh
+https://wwtn.lanzout.com/iyPV62dfcu7a
 
 ---
 
