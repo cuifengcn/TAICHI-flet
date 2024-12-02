@@ -31,7 +31,7 @@
 
 电脑版《太极》2.9.8版本下载地址
 
-https://wwtn.lanzout.com/iTCLi2guzcgh
+https://wwtn.lanzout.com/id5K42gxx9ih
 
 ---
 
